@@ -14,3 +14,8 @@ vim.api.nvim_create_user_command("DevLog", function(opts)
     package.loaded['blame-multi'] = nil
     require('blame-multi.logger'):show()
 end, {})
+
+vim.api.nvim_create_user_command("DevBuffer", function(opts)
+    package.loaded['blame-multi.buffer'] = nil
+    require('blame-multi.buffer').test()
+end, {})

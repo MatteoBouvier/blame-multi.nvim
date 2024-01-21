@@ -1,17 +1,14 @@
 local Log = require('blame-multi.logger')
 local utils = require('blame-multi.utils')
-local DefaultTable = require('blame-multi.default_table')
 
----@alias blame_data table<int, table<string, string>>
+---@alias blame_data table<integer, table<string, string>>
 
 local M = {}
 
 ---Parse git blame data for a single line
 ---@param line_data table<string, string>
 local function parse_line_blame(line_data)
-    local dt = DefaultTable:new('?')
-
-    dt.commit = utils.string.split(line_data[1], ' ')[1]
+    local dt = { commit = utils.string.split(line_data[1], ' ')[1] }
 
     for i = 2, #line_data do
         local k, v = utils.string.split_at_char(line_data[i], ' ')
@@ -33,6 +30,7 @@ local function parse_file_blame(line_blames)
         return {}
     end
 
+    -- TODO: drop the % 12 business, actual line starts with \t and number of header data lines may vary
     if #lines % 12 ~= 0 then
         Log:trace('Error: incorrect number of lines (' .. #lines .. ')')
         return {}
