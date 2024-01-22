@@ -1,22 +1,10 @@
 local Log = require('blame-multi.logger')
 local utils = require('blame-multi.utils')
+local buf = require('blame-multi.buffer')
 
 ---@alias blame_data table<integer, table<string, string>>
 
 local M = {}
-
----Parse git blame data for a single line
----@param line_data table<string, string>
-local function parse_line_blame(line_data)
-    local dt = { commit = utils.string.split(line_data[1], ' ')[1] }
-
-    for i = 2, #line_data do
-        local k, v = utils.string.split_at_char(line_data[i], ' ')
-        dt[k] = v
-    end
-
-    return dt
-end
 
 ---Parse git blame output into table
 ---@param line_blames string
@@ -30,16 +18,23 @@ local function parse_file_blame(line_blames)
         return {}
     end
 
-    -- TODO: drop the % 12 business, actual line starts with \t and number of header data lines may vary
-    if #lines % 12 ~= 0 then
-        Log:trace('Error: incorrect number of lines (' .. #lines .. ')')
-        return {}
-    end
-
     local parsed_lines = {}
+    local parsing_new_line = true
+    local dt
 
-    for i = 1, #lines / 12 do
-        parsed_lines[i] = parse_line_blame(utils.table.slice(lines, (i - 1) * 12, i * 12))
+    for _, line in ipairs(lines) do
+        if parsing_new_line then
+            dt = { commit = utils.string.split(line, ' ')[1] }
+            parsing_new_line = false
+        elseif line:sub(1, 1) == "\t" then
+            dt['line'] = line
+            table.insert(parsed_lines, dt)
+            parsing_new_line = true
+        else
+            Log:trace(line)
+            local k, v = utils.string.split_at_char(line, ' ')
+            dt[k] = v
+        end
     end
 
     return parsed_lines
@@ -65,6 +60,7 @@ end
 M.blame_file = function()
     local blame = get_file_blame()
     Log:trace("parsed lines: ", blame[1])
+    buf.display(blame)
 end
 
 return M
