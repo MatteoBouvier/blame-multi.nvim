@@ -23,15 +23,16 @@ local function parse_file_blame(line_blames)
     local dt
 
     for _, line in ipairs(lines) do
+        line = utils.string.rtrim(line)
+
         if parsing_new_line then
             dt = { commit = utils.string.split(line, ' ')[1] }
             parsing_new_line = false
         elseif line:sub(1, 1) == "\t" then
-            dt['line'] = line
+            dt['line'] = line:sub(2, #line)
             table.insert(parsed_lines, dt)
             parsing_new_line = true
         else
-            Log:trace(line)
             local k, v = utils.string.split_at_char(line, ' ')
             dt[k] = v
         end
@@ -60,6 +61,9 @@ end
 M.blame_file = function()
     local blame = get_file_blame()
     Log:trace("parsed lines: ", blame[1])
+    Log:trace(blame[#blame - 1])
+    Log:trace(blame[#blame])
+    vim.print(vim.api.nvim_get_current_buf())
     buf.display(blame)
 end
 

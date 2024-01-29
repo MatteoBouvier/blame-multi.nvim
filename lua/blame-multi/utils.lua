@@ -37,6 +37,13 @@ M.string.first_n_lines = function(s, n)
     return table.concat(lines, '\n', 1, n)
 end
 
+---Trim trailing spaces
+---@param s any
+---@return string
+M.string.rtrim = function(s)
+    return string.gsub(s, "(.-)[ ]*$", "%1")
+end
+
 ---Get slice of table t
 ---@param t table
 ---@param start integer

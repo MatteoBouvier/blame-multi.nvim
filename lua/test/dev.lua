@@ -3,8 +3,7 @@ vim.opt.rtp:append('/home/mbouvier/git/blame-multi.nvim')
 local function unload()
     package.loaded['blame-multi'] = nil
     package.loaded['blame-multi.buffer'] = nil
-    package.loaded['blame-multi.default_table'] = nil
-    package.loaded['blame-multi.logger'] = nil
+    -- package.loaded['blame-multi.logger'] = nil
     package.loaded['blame-multi.utils'] = nil
 end
 

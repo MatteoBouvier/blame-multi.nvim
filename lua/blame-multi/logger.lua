@@ -73,4 +73,6 @@ function Logger:trace(...)
     end
 end
 
-return Logger:new()
+local logger = Logger:new()
+
+return logger

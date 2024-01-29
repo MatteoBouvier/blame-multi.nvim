@@ -3,30 +3,35 @@ local utils = require('blame-multi.utils')
 local M = {}
 
 local ns = vim.api.nvim_create_namespace('BlameMultiVirtualText')
+vim.cmd([[
+  highlight link CommentHl Comment
+]])
 
 ---Format blame data for a single line for displaying as virtual text
 --- Author, date time • commit short hash • commit message
 ---@param line_data table<string, string>
 ---@return string[][]
 local function format_blame_line(line_data)
-    local date = { os.date("%d/%m/%Y %H:%M:%S", tonumber(line_data.author_time)), "Normal" }
+    local date = { os.date("%d/%m/%Y %H:%M:%S", tonumber(line_data['author-time'])), "CommentHl" }
 
     if utils.is_committed(line_data) then
         return {
-            { line_data.author or "Unknown", "Normal" },
-            { ", ",                          "Normal" },
+            -- TODO: strip line for author
+            -- TODO: replace "MatteoBouvier" by "You"
+            { line_data.author or "Unknown", "CommentHl" },
+            { ", ",                          "CommentHl" },
             date,
-            { " • ", "Normal" },
-            { line_data.commit:sub(1, 8), "Normal" },
-            { " • ", "Normal" },
-            { line_data.summary, "Normal" },
+            { " • ", "CommentHl" },
+            { line_data.commit:sub(1, 8), "CommentHl" },
+            { " • ", "CommentHl" },
+            { line_data.summary, "CommentHl" },
         }
     else
         return {
-            { "You", "Normal" },
-            { ", ",  "Normal" },
+            { "You", "CommentHl" },
+            { ", ",  "CommentHl" },
             date,
-            { " • Uncommitted changes", "Normal" },
+            { " • Uncommitted changes", "CommentHl" },
         }
     end
 end
