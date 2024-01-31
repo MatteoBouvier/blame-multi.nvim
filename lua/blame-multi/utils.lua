@@ -24,8 +24,12 @@ end
 ---@return string
 ---@return string
 M.string.split_at_char = function(s, char)
-    s = s .. char
     local index_of_char = s:find(char)
+
+    if index_of_char == nil then
+        return s, ''
+    end
+
     return s:sub(1, index_of_char - 1), s:sub(index_of_char + 1, #s)
 end
 

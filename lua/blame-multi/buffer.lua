@@ -9,6 +9,9 @@ vim.cmd([[
   highlight link CommentHl Comment
 ]])
 
+
+-- TODO: remove on Cursor move or buffer loses focus
+
 ---Format blame data for a single line for displaying as virtual text
 --- Author, date time • commit short hash • commit message
 ---@param line_data table<string, string>
@@ -18,7 +21,6 @@ local function format_blame_line(line_data)
 
     if utils.git.is_committed(line_data) then
         return {
-            -- TODO: strip line for author
             -- TODO: replace "MatteoBouvier" by "You"
             { line_data.author or "Unknown", "CommentHl" },
             { ", ",                          "CommentHl" },
