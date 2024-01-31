@@ -1,4 +1,6 @@
 local utils = require('blame-multi.utils')
+local config = require('blame-multi.config')
+local Log = require('blame-multi.logger')
 
 local M = {}
 
@@ -14,7 +16,7 @@ vim.cmd([[
 local function format_blame_line(line_data)
     local date = { os.date("%d/%m/%Y %H:%M:%S", tonumber(line_data['author-time'])), "CommentHl" }
 
-    if utils.is_committed(line_data) then
+    if utils.git.is_committed(line_data) then
         return {
             -- TODO: strip line for author
             -- TODO: replace "MatteoBouvier" by "You"
@@ -42,25 +44,10 @@ M.display = function(blame_data)
     for i, line_data in pairs(blame_data) do
         vim.api.nvim_buf_set_extmark(0, ns, i - 1, 0, {
             virt_text = format_blame_line(line_data),
-            virt_text_win_col = 100,
+            virt_text_win_col = config.opts.virtual_text_column,
             virt_text_hide = false,
         })
     end
-end
-
-M.test = function()
-    M.display({
-        {
-            commit = "0000000000000000000000000000000000000000",
-            author = "Not Committed Yet",
-            author_time = "1705853511",
-        },
-        {
-            commit = "0000000000000000000000000000000000000000",
-            author = "Not Committed Yet",
-            author_time = "1705853511",
-        },
-    })
 end
 
 return M

@@ -1,6 +1,7 @@
 local M = {
     string = {},
     table = {},
+    git = {},
 }
 
 ---Split string at every occurence of <delimiter>
@@ -85,9 +86,13 @@ end
 ---Check if a line has been committed
 ---@param t table
 ---@return boolean
-M.is_committed = function(t)
+M.git.is_committed = function(t)
     if t.commit == nil then return false end
     return t.commit ~= "0000000000000000000000000000000000000000"
+end
+
+M.git.is_repo = function()
+    return vim.split(vim.api.nvim_command_output [[:!git rev-parse --is-inside-work-tree]], '\n')[3] == 'true'
 end
 
 return M
