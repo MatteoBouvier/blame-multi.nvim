@@ -20,10 +20,14 @@ local function format_blame_line(line_data)
     local date = { os.date("%d/%m/%Y %H:%M:%S", tonumber(line_data['author-time'])), "CommentHl" }
 
     if utils.git.is_committed(line_data) then
+        local author = line_data.author or "Unknown"
+        if author == utils.git.user_name() then
+            author = "You"
+        end
+
         return {
-            -- TODO: replace "MatteoBouvier" by "You"
-            { line_data.author or "Unknown", "CommentHl" },
-            { ", ",                          "CommentHl" },
+            { author, "CommentHl" },
+            { ", ",   "CommentHl" },
             date,
             { " • ", "CommentHl" },
             { line_data.commit:sub(1, 8), "CommentHl" },

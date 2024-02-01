@@ -99,4 +99,8 @@ M.git.is_repo = function()
     return vim.split(vim.api.nvim_command_output [[:!git rev-parse --is-inside-work-tree]], '\n')[3] == 'true'
 end
 
+M.git.user_name = function()
+    return vim.split(vim.api.nvim_command_output [[:!git config --get user.name]], "\n")[3]
+end
+
 return M
