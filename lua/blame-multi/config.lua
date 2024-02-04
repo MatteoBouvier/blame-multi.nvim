@@ -1,4 +1,5 @@
 local utils = require('blame-multi.utils')
+
 local M = {}
 
 local defaults = {

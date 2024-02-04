@@ -1,8 +1,5 @@
 local Log = require('blame-multi.logger')
 local utils = require('blame-multi.utils')
-local buf = require('blame-multi.buffer')
-
----@alias blame_data table<integer, table<string, string>>
 
 local M = {}
 
@@ -43,7 +40,7 @@ end
 
 ---Get git blame data for each line in a file
 ---@return blame_data
-local function get_file_blame()
+M.get_file_blame = function()
     local file_name = vim.fn.expand('%:p')
 
     local cmd = "git --no-pager blame --line-porcelain " .. file_name
@@ -56,15 +53,6 @@ local function get_file_blame()
     handle:close()
 
     return parse_file_blame(line_blames)
-end
-
-M.blame_file = function()
-    local blame = get_file_blame()
-    Log:trace("parsed lines: ", blame[1])
-    Log:trace(blame[#blame - 1])
-    Log:trace(blame[#blame])
-    vim.print(vim.api.nvim_get_current_buf())
-    buf.display(blame)
 end
 
 return M

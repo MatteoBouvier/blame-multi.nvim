@@ -1,4 +1,5 @@
 local utils = require('blame-multi.utils')
+-- TODO: use Busted
 
 ---@param o1 any|table First object to compare
 ---@param o2 any|table Second object to compare

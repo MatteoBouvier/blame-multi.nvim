@@ -10,14 +10,14 @@ local function reload()
     require('blame-multi').setup()
 end
 
-vim.api.nvim_create_user_command("DevClear", function(opts)
+vim.api.nvim_create_user_command("DevBlameToggle", function(opts)
     reload()
-    require('blame-multi.logger'):clear()
+    require('blame-multi').toggle_blame()
 end, {})
 
-vim.api.nvim_create_user_command("DevBlame", function(opts)
+vim.api.nvim_create_user_command("DevLogClear", function(opts)
     reload()
-    require('blame-multi').blame_file()
+    require('blame-multi.logger'):clear()
 end, {})
 
 vim.api.nvim_create_user_command("DevLog", function(opts)

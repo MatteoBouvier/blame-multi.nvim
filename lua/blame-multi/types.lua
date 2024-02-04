@@ -1,0 +1,14 @@
+---@alias blame_data table<integer, table<string, string>>
+-- Example:
+-- {author-mail = <m.bouvier@vidium-solutions.com>,
+--  author-time = 1705858738,
+--  committer = MatteoBouvierVidium,
+--  author-tz = +0100,
+--  author = MatteoBouvierVidium,
+--  committer-tz = +0100,
+--  filename = lua/blame-multi/buffer.lua,
+--  line = local utils = require('blame-multi.utils'),
+--  committer-time = 1705858738,
+--  commit = a002ca1a08f9db10892e1640e560463e3f7e105a,
+--  summary = basic logic for blame data display as virtual text,
+--  committer-mail = <m.bouvier@vidium-solutions.com>}
