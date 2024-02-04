@@ -1,6 +1,3 @@
-local utils = require('blame-multi.utils')
--- TODO: use Busted
-
 ---@param o1 any|table First object to compare
 ---@param o2 any|table Second object to compare
 ---@param ignore_mt boolean True to ignore metatables (a recursive function to tests tables inside tables)
@@ -35,9 +32,13 @@ function table_equals(o1, o2, ignore_mt)
     return true
 end
 
-function test_table_slice()
-    assert(table_equals(utils.table.slice({ 1, 2, 3, 4, 5 }, 2, 4), { 2, 3, 4 }, true))
-end
+describe("Busted", function()
+    local utils = require('blame-multi.utils')
 
-test_table_slice()
-print('END')
+    it("test table slicing", function()
+        local t1 = { 2, 3, 4 }
+        local t2 = utils.table.slice({ 1, 2, 3, 4, 5 }, 2, 4)
+
+        assert.are.same(t1, t2)
+    end)
+end)
