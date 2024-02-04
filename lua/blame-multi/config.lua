@@ -15,12 +15,13 @@ local defaults = {
     -- `virtual_text_column` (only valid when `position` is 'virtual') :
     --      - a colum number where to show the virtual text
     --      - the string 'colorcolumn' to show the virtual text after the colorcolumn
-    virtual_text_column = 100,
+    virtual_text_column = 'colorcolumn',
     -- ignore white space: bool
     -- color_palette
     -- people_icons = {
     --     You = '🐱'
     -- }
+    -- color_by = 'people', -- people | date
 }
 
 -- TODO: feature -> list in telescope (or diff view ?) all files modified in same commit as where cursor is

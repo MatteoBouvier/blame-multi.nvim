@@ -57,10 +57,8 @@ function Logger:trace(...)
             for _, line in ipairs(utils.string.split(element, '\n')) do
                 table.insert(lines, line)
             end
-        elseif type(element) == "nil" then
-            table.insert(lines, "nil")
         else
-            error("Cannot log object of type " .. type(element))
+            table.insert(lines, tostring(element))
         end
     end
 

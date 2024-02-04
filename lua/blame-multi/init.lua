@@ -1,4 +1,4 @@
-local blame = require('blame-multi.blame')
+local blame_data = require('blame-multi.blame')
 local buffer = require('blame-multi.buffer')
 local config = require('blame-multi.config')
 local Log = require('blame-multi.logger')
@@ -15,10 +15,10 @@ M.setup()
 
 if config._enabled then
     M.show_blame = function()
-        local blame_data = blame.get_file_blame()
-        Log:trace("parsed lines: ", blame[1])
-        Log:trace(blame[#blame - 1])
-        Log:trace(blame[#blame])
+        local blame_data = blame_data.get_file_blame()
+        Log:trace("parsed lines: ", blame_data[1])
+        Log:trace(blame_data[#blame_data - 1])
+        Log:trace(blame_data[#blame_data])
         buffer.show_blame(blame_data)
     end
 

@@ -15,7 +15,7 @@ M.string.split = function(s, delimiter)
         table.insert(result, match);
     end
 
-    return result;
+    return result
 end
 
 ---Split a string in two at first occurence of a character
