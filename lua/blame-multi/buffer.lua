@@ -1,6 +1,5 @@
 local utils = require('blame-multi.utils')
 local config = require('blame-multi.config')
-local Log = require('blame-multi.logger')
 
 local M = {}
 
@@ -47,10 +46,17 @@ end
 ---Display blame data as virtual text
 ---@param blame_data table<integer, table<string, string>>
 M.display = function(blame_data)
+    local column
+    if config.opts.virtual_text_column == 'colorcolumn' then
+        column = vim.o.colorcolumn
+    else
+        column = config.opts.virtual_text_column
+    end
+
     for i, line_data in pairs(blame_data) do
         vim.api.nvim_buf_set_extmark(0, ns, i - 1, 0, {
             virt_text = format_blame_line(line_data),
-            virt_text_win_col = config.opts.virtual_text_column,
+            virt_text_win_col = column,
             virt_text_hide = false,
         })
     end

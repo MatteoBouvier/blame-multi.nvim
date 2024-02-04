@@ -9,11 +9,13 @@ local defaults = {
     -- auto_show: bool
     -- delay: 500 (if auto_show)
     -- max_file_length: 40000 (if auto_show)
-    position = 'virtual',      -- left | right | virtual
-    virtual_text_column = 100, -- colum number where to show the virtual text
-    -- (only valid with position = 'right_virtual')
+    position = 'virtual', -- left | right | virtual
+
+    -- `virtual_text_column` (only valid when `position` is 'virtual') :
+    --      - a colum number where to show the virtual text
+    --      - the string 'colorcolumn' to show the virtual text after the colorcolumn
+    virtual_text_column = 100,
     -- ignore white space: bool
-    -- skip_empty_lines: bool
     -- color_palette
     -- people_icons = {
     --     You = '🐱'
@@ -26,6 +28,7 @@ local defaults = {
 -- TODO: feature -> color lines by how old they are
 -- TODO: feature -> show diff with previous commit in virtual text above (prev commit info + line changes) (and keep going back ?)
 -- TODO: feature -> position in window left to current, with auto scroll
+-- TODO: handle folded segments
 
 function M.setup(opts)
     if vim.fn.executable('git') == 0 then
