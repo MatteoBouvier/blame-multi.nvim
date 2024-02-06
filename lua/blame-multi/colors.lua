@@ -1,5 +1,8 @@
 local Log = require('blame-multi.logger')
 
+vim.cmd([[ highlight link CommentHl Comment ]])
+
+
 local M = {}
 
 M.palettes = {}

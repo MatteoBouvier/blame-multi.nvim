@@ -3,9 +3,6 @@ local config = require('blame-multi.config')
 local colors = require('blame-multi.colors')
 
 local ns = vim.api.nvim_create_namespace('BlameMultiVirtualText')
-vim.cmd([[
-  highlight link CommentHl Comment
-]])
 
 local M = {}
 local virttext_ids = {}
@@ -91,7 +88,7 @@ local function get_virtual_lines(this_line_data, next_line_data, hl)
         return {}, this_line_data.summary
     else
         return { {
-            { string.rep(' ', get_column()) .. '┃ ', hl },
+            { string.rep(' ', get_column()) .. '┃  ', hl },
             { this_line_data.summary, 'CommentHl' }
         } }, nil
     end
@@ -139,7 +136,7 @@ M.show_blame = function(blame_data)
         else
             local text
             if previous_line_summary ~= nil then
-                text = ' ' .. previous_line_summary
+                text = '  ' .. previous_line_summary
                 previous_line_summary = nil
             else
                 text = string.rep(' ', header_len)
