@@ -1,6 +1,5 @@
 local utils = require('blame-multi.utils')
 local colors = require('blame-multi.colors')
-local Log = require('blame-multi.logger')
 
 local M = {}
 
@@ -25,9 +24,6 @@ local defaults = {
 }
 
 -- TODO: feature -> list in telescope (or diff view ?) all files modified in same commit as where cursor is
--- TODO: feature -> group lines with common author and timestamp : show info only once + color vertical line
---                  if possible, show info on one line, commit message on line under
--- TODO: feature -> color lines by how old they are
 -- TODO: feature -> show diff with previous commit in virtual text above (prev commit info + line changes) (and keep going back ?)
 -- TODO: feature -> position in window left to current, with auto scroll
 -- TODO: handle folded segments

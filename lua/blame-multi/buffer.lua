@@ -5,10 +5,9 @@ local colors = require('blame-multi.colors')
 local ns = vim.api.nvim_create_namespace('BlameMultiVirtualText')
 
 local M = {}
-local virttext_ids = {}
 
 M.is_showing = function()
-    return #virttext_ids > 0
+    return #vim.api.nvim_buf_get_extmarks(0, ns, 0, -1, { limit = 1 }) > 0
 end
 
 
@@ -106,7 +105,6 @@ M.show_blame = function(blame_data)
     local previous_line_summary
     local header_len = 0
     local virt_lines
-    local id
     local hl = nil
 
     for i, line_data in ipairs(blame_data) do
@@ -123,7 +121,7 @@ M.show_blame = function(blame_data)
 
             virt_lines, previous_line_summary = get_virtual_lines(line_data, blame_data[i + 1], hl)
 
-            id = vim.api.nvim_buf_set_extmark(0, ns, i - 1, 0, {
+            vim.api.nvim_buf_set_extmark(0, ns, i - 1, 0, {
                 virt_text = {
                     { "╭─ ", hl },
                     { author, "CommentHl" },
@@ -142,7 +140,7 @@ M.show_blame = function(blame_data)
                 text = string.rep(' ', header_len)
             end
 
-            id = vim.api.nvim_buf_set_extmark(0, ns, i - 1, 0, {
+            vim.api.nvim_buf_set_extmark(0, ns, i - 1, 0, {
                 virt_text = {
                     { '┃', hl },
                     { text, 'CommentHl' } },
@@ -150,19 +148,16 @@ M.show_blame = function(blame_data)
                 virt_text_hide = false,
             })
         end
-
-        table.insert(virttext_ids, id)
     end
 end
 
 
 ---Clear blame data
 M.clear_blame = function()
-    for _, id in ipairs(virttext_ids) do
+    for _, mark in ipairs(vim.api.nvim_buf_get_extmarks(0, ns, 0, -1, {})) do
+        local id, _, _ = unpack(mark)
         vim.api.nvim_buf_del_extmark(0, ns, id)
     end
-
-    virttext_ids = {}
 end
 
 
