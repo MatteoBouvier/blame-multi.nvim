@@ -1,4 +1,4 @@
----@alias blame_data table<integer, table<string, string>>
+---@alias blame_data { ['author-mail']: string, ['author-time']: string, ['committer']: string, ['author-tz']: string, ['author']: string, ['committer-tz']: string, ['filename']: string, ['committer-time']: string, ['commit']: string, ['summary']: string, ['committer-mail']: string }
 -- Example:
 -- {author-mail = <m.bouvier@vidium-solutions.com>,
 --  author-time = 1705858738,

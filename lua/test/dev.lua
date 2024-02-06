@@ -6,6 +6,7 @@ vim.api.nvim_create_user_command("DevReload", function(opts)
     package.loaded['blame-multi.buffer'] = nil
     package.loaded['blame-multi.config'] = nil
     package.loaded['blame-multi.utils'] = nil
+    package.loaded['blame-multi.colors'] = nil
 
     require('blame-multi').setup()
 end, {})
