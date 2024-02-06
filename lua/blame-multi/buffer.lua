@@ -1,7 +1,6 @@
 local utils = require('blame-multi.utils')
 local config = require('blame-multi.config')
 local colors = require('blame-multi.colors')
-local Log = require('blame-multi.logger')
 
 local ns = vim.api.nvim_create_namespace('BlameMultiVirtualText')
 vim.cmd([[
@@ -58,8 +57,6 @@ local function get_timestamp_range(blame_data)
         end
     end
 
-    Log:trace("most_recent " .. most_recent)
-    Log:trace("oldest " .. oldest)
     return most_recent, oldest
 end
 
@@ -69,8 +66,14 @@ end
 ---@return function(timestamp: number): number
 local function time_delta(blame_data)
     local most_recent_timestamp, oldest_timestamp = get_timestamp_range(blame_data)
-    local max = most_recent_timestamp - oldest_timestamp
 
+    if most_recent_timestamp == oldest_timestamp then
+        return function(_)
+            return 1
+        end
+    end
+
+    local max = most_recent_timestamp - oldest_timestamp
     return function(timestamp)
         return (timestamp - oldest_timestamp) / max
     end
@@ -114,7 +117,6 @@ M.show_blame = function(blame_data)
             previous_line_commit = line_data.commit
 
             local delta = get_time_delta(line_data['author-time'])
-            Log:trace('delta ' .. delta)
             hl = colors.get_highlight(config.opts['color_palette'], delta)
 
             local author = get_author_name(line_data)
