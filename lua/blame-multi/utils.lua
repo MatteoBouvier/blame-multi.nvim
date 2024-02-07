@@ -49,6 +49,21 @@ M.string.rtrim = function(s)
     return string.gsub(s, "(.-)[ ]*$", "%1")
 end
 
+
+---Hash a string
+---@param str string
+---@param max number
+---@return number
+M.string.hash = function(str, max)
+    local hash = 5381 % max
+
+    for i = 1, #str do
+        hash = (hash * 33 + str:byte(i)) % max
+    end
+    return hash
+end
+
+
 ---Get slice of table t
 ---@param t table
 ---@param start integer

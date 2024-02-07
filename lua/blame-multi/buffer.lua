@@ -20,17 +20,19 @@ local function get_column()
 end
 
 
----Get commit author name
+---Get commit author name and highlight
 ---@param line_data table<string, string>
+---@return string
 ---@return string
 local function get_author_name(line_data)
     local author = line_data.author or "Unknown"
-
     if author == utils.git.user_name() then
         author = "You"
     end
 
-    return author
+    local author_hl = colors.get_color_highlight(utils.string.hash(author, #colors.colors))
+
+    return author, author_hl
 end
 
 
@@ -114,7 +116,7 @@ M.show_blame = function(blame_data)
             local delta = get_time_delta(line_data['author-time'])
             hl = colors.get_highlight(config.opts['color_palette'], delta)
 
-            local author = get_author_name(line_data)
+            local author, author_hl = get_author_name(line_data)
             header_len = #author + 34
 
             local date = os.date("%d/%m/%Y %H:%M:%S", tonumber(line_data['author-time']))
@@ -124,7 +126,7 @@ M.show_blame = function(blame_data)
             vim.api.nvim_buf_set_extmark(0, ns, i - 1, 0, {
                 virt_text = {
                     { "╭─ ", hl },
-                    { author, "CommentHl" },
+                    { author, author_hl },
                     { ", " .. date .. " • " .. line_data.commit:sub(1, 8), "CommentHl" }
                 },
                 virt_text_win_col = column,
