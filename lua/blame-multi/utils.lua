@@ -1,4 +1,8 @@
 local M = {
+    ns = {
+        normal = vim.api.nvim_create_namespace('BlameMultiVirtTextNormal'),
+        standout = vim.api.nvim_create_namespace('BlameMultiVirtTextStandout')
+    },
     string = {},
     table = {},
     git = {},

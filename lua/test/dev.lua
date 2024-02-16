@@ -1,12 +1,9 @@
-vim.opt.rtp:append('/home/mbouvier/git/blame-multi.nvim')
-
 vim.api.nvim_create_user_command("DevReload", function(opts)
-    package.loaded['blame-multi'] = nil
-    package.loaded['blame-multi.blame'] = nil
-    package.loaded['blame-multi.buffer'] = nil
-    package.loaded['blame-multi.config'] = nil
-    package.loaded['blame-multi.utils'] = nil
-    package.loaded['blame-multi.colors'] = nil
+    for k, _ in pairs(package.loaded) do
+        if string.match(k, "blame%-multi") then
+            package.loaded[k] = nil
+        end
+    end
 
     require('blame-multi').setup()
 end, {})

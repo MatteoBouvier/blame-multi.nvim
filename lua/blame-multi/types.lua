@@ -1,14 +1,6 @@
----@alias blame_data { ['author-mail']: string, ['author-time']: string, ['committer']: string, ['author-tz']: string, ['author']: string, ['committer-tz']: string, ['filename']: string, ['committer-time']: string, ['commit']: string, ['summary']: string, ['committer-mail']: string }
--- Example:
--- {author-mail = <m.bouvier@vidium-solutions.com>,
---  author-time = 1705858738,
---  committer = MatteoBouvierVidium,
---  author-tz = +0100,
---  author = MatteoBouvierVidium,
---  committer-tz = +0100,
---  filename = lua/blame-multi/buffer.lua,
---  line = local utils = require('blame-multi.utils'),
---  committer-time = 1705858738,
---  commit = a002ca1a08f9db10892e1640e560463e3f7e105a,
---  summary = basic logic for blame data display as virtual text,
---  committer-mail = <m.bouvier@vidium-solutions.com>}
+---@alias RGB_color { r: number, g: number, b: number }
+-- r, g, b in [0-255]
+
+---@alias RGBA_color { r: number, g: number, b: number, a: number}
+-- r, g, b in [0-255]
+-- a in [0-1]

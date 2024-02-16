@@ -1,7 +1,16 @@
-local Log = require('blame-multi.logger')
+local function Hex2Dec(color)
+    local r = tonumber(color:sub(1, 2), 16)
+    local g = tonumber(color:sub(3, 4), 16)
+    local b = tonumber(color:sub(5, 6), 16)
+    return { r = r, g = g, b = b }
+end
 
-vim.cmd([[ highlight link CommentHl Comment ]])
-
+local function Dec2Hex(color)
+    local r = string.format("%06x", color.r):sub(5, 6)
+    local g = string.format("%06x", color.g):sub(5, 6)
+    local b = string.format("%06x", color.b):sub(5, 6)
+    return r .. g .. b
+end
 
 local M = {}
 
@@ -76,5 +85,41 @@ M.get_color_highlight = function(index)
     end
     return hl_name
 end
+
+M.get_background_color = function()
+    return Hex2Dec(string.format("%06x", vim.api.nvim_get_hl(0, { name = 'Normal' }).bg))
+end
+
+-- adapted from https://stackoverflow.com/a/65233542
+---Blend two colors based on transparency
+---@param front_color RGBA_color
+---@param back_color RGB_color
+---@return RGB_color
+M.blend_colors = function(front_color, back_color)
+    local combined_color = {
+        r = ((1 - front_color.a) * back_color.r) + (front_color.a * front_color.r),
+        g = ((1 - front_color.a) * back_color.g) + (front_color.a * front_color.g),
+        b = ((1 - front_color.a) * back_color.b) + (front_color.a * front_color.b)
+    }
+
+    combined_color.r = combined_color.r > 255 and 255 or combined_color.r
+    combined_color.g = combined_color.g > 255 and 255 or combined_color.g
+    combined_color.b = combined_color.b > 255 and 255 or combined_color.b
+
+    return combined_color
+end
+
+
+vim.api.nvim_set_hl(0, 'BlameMultiVirtTextNormal_Highlight', { fg = "#6e6a86" })
+M.NormalVirtTextHighlight = 'BlameMultiVirtTextNormal_Highlight'
+
+M.generate_standout_virt_text_highlight = function()
+    local front_color = { r = 255, g = 255, b = 255, a = 0.1 }
+    local background_color = M.get_background_color()
+    local combined_color = M.blend_colors(front_color, background_color)
+
+    vim.api.nvim_set_hl(0, 'BlameMultiVirtTextStandout_Highlight', { bg = "#" .. Dec2Hex(combined_color) })
+end
+M.StandoutVirtTextHighlight = 'BlameMultiVirtTextStandout_Highlight'
 
 return M
