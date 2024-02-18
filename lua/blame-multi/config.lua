@@ -57,12 +57,17 @@ function M.setup(opts)
 	})
 end
 
----
+---Get column at which to display virtual text
+---@return integer
 M.get_column = function()
 	if M.opts.virtual_text_column == 'colorcolumn' then
 		return tonumber(vim.o.colorcolumn) - 1
 	else
-		return tonumber(config.opts.virtual_text_column)
+		local column = tonumber(M.opts.virtual_text_column)
+		if column == nil then
+			error("BlameMulti: invalid config value " .. M.opts.virtual_text_column .. " for 'virtual_text_column'")
+		end
+		return column
 	end
 end
 
