@@ -5,6 +5,7 @@ local M = {}
 ---@field commit string
 ---@field line number
 ---@field nb_lines number
+---@field ids integer[]
 M.BlameInfo = {}
 
 ---Get new BlameInfo
@@ -17,6 +18,7 @@ function M.BlameInfo:new(commit)
 		commit = commit,
 		line = 0,
 		nb_lines = 0,
+		ids = {},
 	}, self)
 end
 
@@ -25,7 +27,7 @@ end
 ---@param line number
 function M.BlameInfo:set_line(line)
 	if self.line == 0 then
-		self.line = line - 1 -- -1 offset because line numbering starts at 0 in the vim.api
+		self.line = line
 	end
 
 	self.nb_lines = self.nb_lines + 1
@@ -50,6 +52,7 @@ end
 ---------------------------------------------------------------------------------------------------
 ---@class BlameData
 ---@field info BlameInfo[]
+---@field private _line_map {integer: integer}
 ---@field oldest_commit number
 ---@field most_recent_commit number
 M.BlameData = {}
@@ -59,13 +62,14 @@ M.BlameData = {}
 function M.BlameData:new()
 	self.__index = function(instance, key)
 		if type(key) == 'number' then
-			return instance.data[key]
+			return instance.info[instance._line_map[key]]
 		else
 			return M.BlameData[key]
 		end
 	end
 	return setmetatable({
 		info = {},
+		_line_map = {},
 		oldest_commit = math.huge,
 		most_recent_commit = 0,
 	}, self)
@@ -82,6 +86,8 @@ function M.BlameData:append(info)
 		if info_timestamp < self.oldest_commit then self.oldest_commit = info_timestamp end
 		if info_timestamp > self.most_recent_commit then self.most_recent_commit = info_timestamp end
 	end
+
+	self._line_map[#self._line_map + 1] = #self.info
 end
 
 ---Determine how old a commit's timestamp is
@@ -95,13 +101,15 @@ function M.BlameData:time_delta(timestamp)
 end
 
 ---Iterate through blame info objects
----@return function(): BlameInfo
+---@return fun(): BlameInfo?
 function M.BlameData:iter()
 	local i = 0
 	return function()
 		i = i + 1
 		if i <= #self.info then
 			return self.info[i]
+		else
+			return nil
 		end
 	end
 end

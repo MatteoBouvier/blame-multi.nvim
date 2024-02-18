@@ -18,8 +18,9 @@ local function parse_file_blame(line_blames)
 
 	local parsed_lines = info.BlameData:new()
 	local parsing_new_line = true
-	local line_counter = 0
+	local line_counter = -1
 	local current_commit
+	---@type BlameInfo
 	local blame_info
 
 	for _, line in ipairs(lines) do
